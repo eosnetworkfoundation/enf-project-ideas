@@ -57,13 +57,16 @@ There is yet another issue with WASM that exists which is that it is a stack bas
 WASM claims that it is immune to 'return oriented programming' attacks are impossible but Stivenart, et.al found this to untrue and insufficient for security risk mitigation (The Security Risk of Lacking Compiler Protection in WebAssembly).
 
 ## NatiVM Details
-The IR of Deterministic AMD64 will be a proper subset of AMD64. This will allow for CDT/Anvil to compile and generate either a smart contract binary or a regular shared object file. The shared object file will be run in a 
+The IR of Deterministic AMD64 will be a proper subset of AMD64. This will allow for CDT/ANTLER to compile and generate either a smart contract binary or a regular shared object file. 
 
  - The standard for NatiVM will be an open standard.
  - The licensing will be MIT.
  - Deterministic AMD64 will be a proper subset of AMD64 and therefore perfectly compatible with preexisting AMD64 machines.
  - Future (v2 or beyond) will introduce Deterministic ARM64 as these machines become more ubiquitous.
 
+To mitigate 'return oriented programming' from occurring in smart contracts and supply developers with more security a simple stack canary system can be used with block time injected as the canary check value.
+
+To short gap solution for ARM64 based systems will be created as a simple shotgun static binary rewriter.  AMD64 to ARM64 tends to have good affinity for optimizations so a loss of performance should be minimal.
 ## Beyond VM
 Because we are targeting AMD64, CDT or ANTLER should produce two binaries for consumption. One is the binary for smart contract deployment on the blockchain. The other is a regular shared object with DWARF information for debugging with LLDB/GDB. A small 'loader' will be available to load these 'libraries' as smart contracts and through "side-car" debugging with nodeos allow for succinct debugging, testing and quick running of these.
 
@@ -76,3 +79,7 @@ The ability to stop at a block and "forward" the action data will be incredibly 
 
 ### The Rest of The World
 We will be able to utilize premade tooling such as LLVM's static analysis tools and dynamic analysis tools. A plethora of preexisting tools will be immediately usable because of the usage of the shared object and driver architecture.
+
+Utilizing LLVM's built-in static and dynamic analysis tooling would be available immediately.  Professional tooling such as valgrind, perftools, etc. should just work with minimal effort.
+
+Leveraging the decades worth of highly optimized assembly code for things like highly optimized crypto functions and the like, can start to allow for movement of `consensus mechanics` into the virtualized smart contract state without loss of performance.
